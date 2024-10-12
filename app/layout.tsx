@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -16,6 +17,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <Toaster richColors />
             <body className={`${hsr.className}`}>{children}</body>
         </html>
     );
