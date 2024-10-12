@@ -7,7 +7,7 @@ import {
     CardTitle,
 } from "./shadcn/Card";
 import Image from "next/image";
-import { FaFile, FaDownload, FaLink } from "react-icons/fa";
+import { FaDownload, FaLink } from "react-icons/fa";
 import { toast } from "sonner";
 import { Button } from "./shadcn/Button";
 import InteractiveCardFooter from "./interactiveFooter";
@@ -16,7 +16,6 @@ export default async function ImageComponent({ id }: { id: string }) {
     let imageData;
     let userData;
     let error = null;
-
 
     try {
         const response = await fetch(
@@ -77,7 +76,6 @@ export default async function ImageComponent({ id }: { id: string }) {
         );
 
         userData = await userData.json();
-
     } catch (err: any) {
         error = err.message || "An error occurred while fetching the image.";
     }
@@ -106,32 +104,31 @@ export default async function ImageComponent({ id }: { id: string }) {
     return (
         <div className="flex items-center justify-center min-h-screen">
             <Card className="w-full max-w-4xl mx-auto bg-[#2f1c42] border-[#2f1c42]">
-                <CardHeader>
-                    <div className="flex items-center space-x-2">
-                        <FaFile className="text-2xl text-white" />
+                <div className="flex-col justify-center">
+                    <CardHeader className="flex items-center space-x-2">
                         <CardTitle className="text-white text-xl">
                             {imageData.name}
                         </CardTitle>
+                    </CardHeader>
+                </div>
+                <Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-[100px] flex items-center justify-between p-4">
+                    <div className="flex flex-col justify-center">
+                        <CardTitle className="text-2xl text-white">
+                            Uploaded by:
+                        </CardTitle>
+                        <CardDescription className="text-2xl text-white">
+                            {userData?.username}
+                        </CardDescription>
                     </div>
-                </CardHeader>
-                <Card className="mt-5 w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-[100px] flex items-center justify-between p-4">
-            <div className="flex flex-col justify-center">
-                <CardTitle className="text-2xl text-white">
-                    Uploaded by:
-                </CardTitle>
-                <CardDescription className="text-2xl text-white">
-                    {userData?.username}
-                </CardDescription>
-            </div>
-            <Image
-                src={userData?.avatar}
-                alt="User avatar"
-                width={70}
-                height={70}
-                className="rounded-full"
-                unoptimized
-            />
-        </Card>
+                    <Image
+                        src={userData?.avatar}
+                        alt="User avatar"
+                        width={70}
+                        height={70}
+                        className="rounded-full"
+                        unoptimized
+                    />
+                </Card>
                 <CardContent className="relative">
                     <div
                         style={{
