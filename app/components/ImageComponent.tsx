@@ -12,7 +12,29 @@ import { toast } from "sonner";
 import { Button } from "./shadcn/Button";
 import InteractiveCardFooter from "./interactiveFooter";
 
-export default async function ImageComponent({ id }: { id: string }) {
+export async function getMetadata({ id }: { id: string }) {
+    const fileData = await fetch(
+        `https://manager.sukusho.cloud/getFile?id=${id}&key=${process.env.BACKEND_SIGNING_KEY}`,
+    );
+
+    const userJson = await fileData.json();
+    const userId = userJson.userId;
+
+    const userData = await fetch(
+        `https://manager.sukusho.cloud/getInfo?id=${userId}&key=${process.env.BACKEND_SIGNING_KEY}`,
+    );
+
+    const userDataJson = await userData.json();
+
+    return {
+        header: userDataJson.embedHeader,
+        footer: userDataJson.embedFooter,
+        url: userJson.url,
+        color: userDataJson.embedColor,
+    };
+}
+
+export async function ImageComponent({ id }: { id: string }) {
     let imageData;
     let userData;
     let error = null;
