@@ -45,29 +45,34 @@ export async function generateMetadata({ params }: PageProps) {
 export default function Page({ params }: PageProps) {
     return (
         <main>
-        <div className="relative">
-            <ImageComponent id={params.slug} />
-        </div>
-        <div className="flex flex-col items-center justify-center w-full">
-                <Card className="mt-10 mb-5 w-10/12 bg-[#2f1c42] border-[#2f1c42] h-20 flex items-center justify-between px-4">
-                    <div className="flex items-center space-x-4">
-                        <div className="flex flex-col justify-center mr-5">
-                        <CardTitle className="text-xl text-white">
-                            Screenshot hosted by sukushocloud
-                        </CardTitle>
-                        <CardTitle className="text-md text-[#ff9900]">
-                            a MikanDev service
-                        </CardTitle>
+            <div className="relative">
+                <ImageComponent id={params.slug} />
+            </div>
+            <div className="flex flex-col items-center justify-center w-full px-4 sm:px-0">
+                <Card className="mt-10 mb-5 w-full sm:w-10/12 bg-[#2f1c42] border-[#2f1c42] min-h-[80px] flex flex-col sm:flex-row items-center justify-between p-4 space-y-4 sm:space-y-0">
+                    <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <div className="flex flex-col justify-center text-center sm:text-left">
+                            <CardTitle className="text-lg sm:text-xl text-white">
+                                Screenshot hosted by sukushocloud
+                            </CardTitle>
+                            <CardTitle className="text-sm sm:text-md text-[#ff9900]">
+                                a MikanDev service
+                            </CardTitle>
                         </div>
                         <Link href="https://sukusho.cloud/">
-                        <Button className="text-white">
-                            <FaRegStar className="text-xl mr-3" />
-                            Try it free!
-                        </Button>
+                            <Button className="text-white w-full sm:w-auto">
+                                <FaRegStar className="text-xl mr-3" />
+                                Try it free!
+                            </Button>
                         </Link>
                     </div>
-                    <Link href="https://mikn.dev/">
-                    <Image src={KawaiiLogo.src} alt="Logo" width={100} height={100} />
+                    <Link href="https://mikn.dev/" className="mt-4 sm:mt-0">
+                        <Image
+                            src={KawaiiLogo.src}
+                            alt="Logo"
+                            width={100}
+                            height={100}
+                        />
                     </Link>
                 </Card>
             </div>

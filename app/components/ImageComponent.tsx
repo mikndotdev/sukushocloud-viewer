@@ -124,21 +124,21 @@ export async function ImageComponent({ id }: { id: string }) {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex items-center justify-center min-h-screen p-4 sm:p-0">
             <Card className="w-full max-w-4xl mx-auto bg-[#2f1c42] border-[#2f1c42]">
                 <div className="flex-col justify-center">
                     <CardHeader className="flex items-center space-x-2">
-                        <CardTitle className="text-white text-xl">
+                        <CardTitle className="text-white text-lg sm:text-xl break-all sm:break-normal">
                             {imageData.name}
                         </CardTitle>
                     </CardHeader>
                 </div>
-                <Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-[100px] flex items-center justify-between p-4">
+                <Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
                     <div className="flex flex-col justify-center">
-                        <CardTitle className="text-2xl text-white">
+                        <CardTitle className="text-xl sm:text-2xl text-white">
                             Uploaded by:
                         </CardTitle>
-                        <CardDescription className="text-2xl text-white">
+                        <CardDescription className="text-lg sm:text-2xl text-white">
                             {userData?.username}
                         </CardDescription>
                     </div>
@@ -147,18 +147,12 @@ export async function ImageComponent({ id }: { id: string }) {
                         alt="User avatar"
                         width={70}
                         height={70}
-                        className="rounded-full"
+                        className="rounded-full ml-4"
                         unoptimized
                     />
                 </Card>
                 <CardContent className="relative">
-                    <div
-                        style={{
-                            position: "relative",
-                            width: "100%",
-                            paddingBottom: "70%",
-                        }}
-                    >
+                    <div className="relative w-full pb-[70%]">
                         <Image
                             src={imageData.url}
                             alt={imageData.name}
