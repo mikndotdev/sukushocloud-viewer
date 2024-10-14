@@ -29,6 +29,9 @@ export async function generateMetadata({ params }: PageProps) {
     return {
         title: userData.header,
         description: userData.footer,
+        robots: {
+            index: false,
+        },
         openGraph: {
             images: [
                 {
