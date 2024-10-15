@@ -163,7 +163,7 @@ export async function ImageComponent({ id }: { id: string }) {
                         />
                     </div>
                 </CardContent>
-                <CardFooter className="flex justify-center">
+                <CardFooter className="flex justify-center mt-5">
                     <InteractiveCardFooter
                         imageUrl={imageData.url}
                         imageName={imageData.name}
