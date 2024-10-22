@@ -1,5 +1,5 @@
 // app/image/[id]/page.tsx
-export const runtime = "experimental-edge";
+export const runtime = "edge";
 import Image from "next/image";
 import Link from "next/link";
 import { getMetadata, ImageComponent } from "@/app/components/ImageComponent";
@@ -10,10 +10,11 @@ import { Button } from "../components/shadcn/Button";
 import KawaiiLogo from "../assets/mikan-vtube.svg";
 
 interface PageProps {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }
 
-export async function generateViewport({ params }: PageProps) {
+export async function generateViewport(props: PageProps) {
+    const params = await props.params;
     const id = params.slug;
     const userData = await getMetadata({ id });
 
@@ -22,7 +23,8 @@ export async function generateViewport({ params }: PageProps) {
     };
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata(props: PageProps) {
+    const params = await props.params;
     const id = params.slug;
     const userData = await getMetadata({ id });
 
@@ -42,7 +44,8 @@ export async function generateMetadata({ params }: PageProps) {
     };
 }
 
-export default function Page({ params }: PageProps) {
+export default async function Page(props: PageProps) {
+    const params = await props.params;
     return (
         <main>
             <div className="relative">
