@@ -16,32 +16,48 @@ interface PageProps {
 export async function generateViewport(props: PageProps) {
     const params = await props.params;
     const id = params.slug;
-    const userData = await getMetadata({ id });
+    try {
+        const userData = await getMetadata({ id });
 
-    return {
-        themeColor: userData.color,
-    };
+        return {
+            themeColor: userData.color,
+        };
+    } catch (e) {
+        return {
+            themeColor: "#2f1c42",
+        };
+    }
 }
 
 export async function generateMetadata(props: PageProps) {
     const params = await props.params;
     const id = params.slug;
-    const userData = await getMetadata({ id });
+    try {
+        const userData = await getMetadata({ id });
 
-    return {
-        title: userData.header,
-        description: userData.footer,
-        robots: {
-            index: false,
-        },
-        openGraph: {
-            images: [
-                {
-                    url: userData.url,
-                },
-            ],
-        },
-    };
+        return {
+            title: userData.header,
+            description: userData.footer,
+            robots: {
+                index: false,
+            },
+            openGraph: {
+                images: [
+                    {
+                        url: userData.url,
+                    },
+                ],
+            },
+        };
+    } catch (e) {
+        return {
+            title: "sukushocloud",
+            description: "Screenshot as a Service",
+            robots: {
+                index: false,
+            },
+        };
+    }
 }
 
 export default async function Page(props: PageProps) {

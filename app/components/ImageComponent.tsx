@@ -157,13 +157,13 @@ export async function ImageComponent({ id }: { id: string }) {
                             src={imageData.url}
                             alt={imageData.name}
                             fill
-                            className="object-contain"
+                            className="object-contain mt-5 mb-5"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             unoptimized
                         />
                     </div>
                 </CardContent>
-                <CardFooter className="flex justify-center">
+                <CardFooter className="flex justify-center mt-5">
                     <InteractiveCardFooter
                         imageUrl={imageData.url}
                         imageName={imageData.name}
