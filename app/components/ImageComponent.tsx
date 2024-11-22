@@ -7,9 +7,6 @@ import {
     CardTitle,
 } from "./shadcn/Card";
 import Image from "next/image";
-import { FaDownload, FaLink } from "react-icons/fa";
-import { toast } from "sonner";
-import { Button } from "./shadcn/Button";
 import InteractiveCardFooter from "./interactiveFooter";
 
 export async function getMetadata({ id }: { id: string }) {
