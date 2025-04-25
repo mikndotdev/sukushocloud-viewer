@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<Toaster richColors />
+			<Toaster richColors position={"top-center"} />
 			<body className={`${hsr.className}`}>{children}</body>
 			<script
 				defer

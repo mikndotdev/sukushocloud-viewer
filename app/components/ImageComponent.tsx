@@ -6,8 +6,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from "./shadcn/Card";
+import { Textarea } from "@/app/components/shadcn/textarea";
 import Image from "next/image";
 import InteractiveCardFooter from "./interactiveFooter";
+import Player from "next-video/player";
 
 export async function getMetadata({ id }: { id: string }) {
 	const fileData = await fetch(
@@ -29,6 +31,18 @@ export async function getMetadata({ id }: { id: string }) {
 		url: userJson.url,
 		color: userDataJson.embedColor,
 	};
+}
+
+export async function getMimetype({ id }: { id: string }) {
+	const fileData = await fetch(
+		`https://manager.sukusho.cloud/getFile?id=${id}&key=${process.env.BACKEND_SIGNING_KEY}`,
+	);
+
+	const data = await fileData.json();
+
+	const url = await fetch(data.url);
+
+	return url.headers.get("content-type");
 }
 
 export async function ImageComponent({ id }: { id: string }) {
@@ -99,6 +113,9 @@ export async function ImageComponent({ id }: { id: string }) {
 		error = err.message || "An error occurred while fetching the image.";
 	}
 
+	const fileData = await fetch(imageData.url);
+	const mimeType = fileData.headers.get("Content-Type");
+
 	if (error) {
 		return (
 			<div className="flex items-center justify-center min-h-screen">
@@ -120,58 +137,187 @@ export async function ImageComponent({ id }: { id: string }) {
 		);
 	}
 
-	return (
-		<div className="flex items-center justify-center min-h-screen p-4 sm:p-0">
-			<Card className="w-full max-w-4xl mx-auto bg-[#2f1c42] border-[#2f1c42]">
-				<div className="flex-col justify-center">
-					<CardHeader className="flex items-center space-x-2">
-						<CardTitle className="text-white text-lg sm:text-xl break-all sm:break-normal">
-							{imageData.name}
-						</CardTitle>
-					</CardHeader>
-				</div>
-				<Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
-					<div className="flex flex-col justify-center">
-						<CardTitle className="text-xl sm:text-2xl text-white">
-							Uploaded by:
-						</CardTitle>
-						<CardDescription className="text-lg sm:text-2xl text-white">
-							{userData?.name}
-						</CardDescription>
+	if (mimeType?.startsWith("image/")) {
+		return (
+			<div className="flex items-center justify-center min-h-screen p-4 sm:p-0">
+				<Card className="w-full max-w-4xl mx-auto bg-[#2f1c42] border-[#2f1c42]">
+					<div className="flex-col justify-center">
+						<CardHeader className="flex items-center space-x-2">
+							<CardTitle className="text-white text-lg sm:text-xl break-all sm:break-normal">
+								{imageData.name}
+							</CardTitle>
+						</CardHeader>
 					</div>
-					<Image
-						src={userData?.avatar}
-						alt="User avatar"
-						width={70}
-						height={70}
-						className="rounded-full ml-4"
-						unoptimized
-					/>
-				</Card>
-				<div className="flex flex-col justify-center items-center my-3">
-					<p className={"text-white justify-center text-sm"}>
-						UID {userData?.id}
-					</p>
-				</div>
-				<CardContent className="relative">
-					<div className="relative w-full pb-[70%]">
+					<Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
+						<div className="flex flex-col justify-center">
+							<CardTitle className="text-xl sm:text-2xl text-white">
+								Uploaded by:
+							</CardTitle>
+							<CardDescription className="text-lg sm:text-2xl text-white">
+								{userData?.name}
+							</CardDescription>
+						</div>
 						<Image
-							src={imageData.url}
-							alt={imageData.name}
-							fill
-							className="object-contain mt-5 mb-5"
-							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+							src={userData?.avatar}
+							alt="User avatar"
+							width={70}
+							height={70}
+							className="rounded-full ml-4"
 							unoptimized
 						/>
+					</Card>
+					<div className="flex flex-col justify-center items-center my-3">
+						<p className={"text-white justify-center text-sm"}>
+							UID {userData?.id}
+						</p>
 					</div>
-				</CardContent>
-				<CardFooter className="flex justify-center mt-5">
-					<InteractiveCardFooter
-						imageUrl={imageData.url}
-						imageName={imageData.name}
-						shortUrl={imageData.shortUrl}
-					/>
-				</CardFooter>
+					<CardContent className="relative">
+						<div className="relative w-full pb-[70%]">
+							<Image
+								src={imageData.url}
+								alt={imageData.name}
+								fill
+								className="object-contain mt-5 mb-5"
+								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+								unoptimized
+							/>
+						</div>
+					</CardContent>
+					<CardFooter className="flex justify-center mt-5">
+						<InteractiveCardFooter
+							imageUrl={imageData.url}
+							imageName={imageData.name}
+							shortUrl={imageData.shortUrl}
+						/>
+					</CardFooter>
+				</Card>
+			</div>
+		);
+	}
+
+	if (mimeType?.startsWith("video/")) {
+		return (
+			<div className="flex items-center justify-center min-h-screen p-4 sm:p-0">
+				<Card className="w-full max-w-4xl mx-auto bg-[#2f1c42] border-[#2f1c42]">
+					<div className="flex-col justify-center">
+						<CardHeader className="flex items-center space-x-2">
+							<CardTitle className="text-white text-lg sm:text-xl break-all sm:break-normal">
+								{imageData.name}
+							</CardTitle>
+						</CardHeader>
+					</div>
+					<Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
+						<div className="flex flex-col justify-center">
+							<CardTitle className="text-xl sm:text-2xl text-white">
+								Uploaded by:
+							</CardTitle>
+							<CardDescription className="text-lg sm:text-2xl text-white">
+								{userData?.name}
+							</CardDescription>
+						</div>
+						<Image
+							src={userData?.avatar}
+							alt="User avatar"
+							width={70}
+							height={70}
+							className="rounded-full ml-4"
+							unoptimized
+						/>
+					</Card>
+					<div className="flex flex-col justify-center items-center my-3">
+						<p className={"text-white justify-center text-sm"}>
+							UID {userData?.id}
+						</p>
+					</div>
+					<CardContent className="relative">
+						<div className="relative w-full">
+							<Player
+								src={imageData.url}
+								className="object-contain mt-5 mb-5"
+							/>
+						</div>
+					</CardContent>
+					<CardFooter className="flex justify-center mt-5">
+						<InteractiveCardFooter
+							imageUrl={imageData.url}
+							imageName={imageData.name}
+							shortUrl={imageData.shortUrl}
+						/>
+					</CardFooter>
+				</Card>
+			</div>
+		);
+	}
+
+	if (mimeType?.startsWith("text/")) {
+		const raw = await fileData.text();
+		return (
+			<div className="flex items-center justify-center min-h-screen p-4 sm:p-0">
+				<Card className="w-full max-w-4xl mx-auto bg-[#2f1c42] border-[#2f1c42]">
+					<div className="flex-col justify-center">
+						<CardHeader className="flex items-center space-x-2">
+							<CardTitle className="text-white text-lg sm:text-xl break-all sm:break-normal">
+								{imageData.name}
+							</CardTitle>
+						</CardHeader>
+					</div>
+					<Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
+						<div className="flex flex-col justify-center">
+							<CardTitle className="text-xl sm:text-2xl text-white">
+								Uploaded by:
+							</CardTitle>
+							<CardDescription className="text-lg sm:text-2xl text-white">
+								{userData?.name}
+							</CardDescription>
+						</div>
+						<Image
+							src={userData?.avatar}
+							alt="User avatar"
+							width={70}
+							height={70}
+							className="rounded-full ml-4"
+							unoptimized
+						/>
+					</Card>
+					<div className="flex flex-col justify-center items-center my-3">
+						<p className={"text-white justify-center text-sm"}>
+							UID {userData?.id}
+						</p>
+					</div>
+					<CardContent className="relative">
+						<div className="relative w-full">
+							<Textarea readOnly className={"h-full w-full"}>
+								{raw}
+							</Textarea>
+						</div>
+					</CardContent>
+					<CardFooter className="flex justify-center mt-5">
+						<InteractiveCardFooter
+							imageUrl={imageData.url}
+							imageName={imageData.name}
+							shortUrl={imageData.shortUrl}
+						/>
+					</CardFooter>
+				</Card>
+			</div>
+		);
+	}
+
+	return (
+		<div className="flex items-center justify-center min-h-screen">
+			<Card className="w-[350px] h-[200px] flex items-center justify-center bg-[#2f1c42] border-[#2f1c42]">
+				<div className="text-center">
+					<CardHeader>
+						<CardTitle className="text-4xl text-white">
+							422
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<CardDescription className="text-2xl text-white">
+							Unsupported file type
+						</CardDescription>
+					</CardContent>
+				</div>
 			</Card>
 		</div>
 	);

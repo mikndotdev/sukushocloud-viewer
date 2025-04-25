@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getMetadata, ImageComponent } from "@/app/components/ImageComponent";
+import {
+	getMetadata,
+	ImageComponent,
+	getMimetype,
+} from "@/app/components/ImageComponent";
 
 import { Card, CardTitle } from "../components/shadcn/Card";
 import { FaRegStar } from "react-icons/fa";
@@ -32,19 +36,64 @@ export async function generateMetadata(props: PageProps) {
 	const id = params.slug;
 	try {
 		const userData = await getMetadata({ id });
+		const mimetype = await getMimetype({ id });
+
+		if (mimetype?.includes("image")) {
+			return {
+				title: userData.header,
+				description: userData.footer,
+				robots: {
+					index: false,
+				},
+				openGraph: {
+					images: [
+						{
+							url: userData.url,
+						},
+					],
+				},
+			};
+		}
+
+		if (mimetype?.includes("video")) {
+			return {
+				title: userData.header,
+				description: userData.footer,
+				robots: {
+					index: false,
+				},
+				openGraph: {
+					images: [
+						{
+							url: userData.url,
+						},
+					],
+				},
+			};
+		}
+
+		if (mimetype?.includes("text")) {
+			return {
+				title: userData.header,
+				description: userData.footer,
+				robots: {
+					index: false,
+				},
+				openGraph: {
+					images: [
+						{
+							url: "https://view.sukusho.cloud/og/TextOG.png",
+						},
+					],
+				},
+			};
+		}
 
 		return {
-			title: userData.header,
-			description: userData.footer,
+			title: "sukushocloud",
+			description: "Screenshot as a Service",
 			robots: {
 				index: false,
-			},
-			openGraph: {
-				images: [
-					{
-						url: userData.url,
-					},
-				],
 			},
 		};
 	} catch (e) {
@@ -60,6 +109,7 @@ export async function generateMetadata(props: PageProps) {
 
 export default async function Page(props: PageProps) {
 	const params = await props.params;
+
 	return (
 		<main>
 			<div className="relative">
@@ -72,7 +122,7 @@ export default async function Page(props: PageProps) {
 					<div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
 						<div className="flex flex-col justify-center text-center sm:text-left">
 							<CardTitle className="text-lg sm:text-xl text-white">
-								Screenshot hosted by sukushocloud
+								File hosted by sukushocloud
 							</CardTitle>
 							<CardTitle className="text-sm sm:text-md text-[#ff9900]">
 								a MikanDev service
