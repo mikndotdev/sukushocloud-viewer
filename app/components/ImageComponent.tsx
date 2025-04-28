@@ -6,6 +6,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "./shadcn/Card";
+import { Button } from "./shadcn/Button";
+import { FaDownload } from "react-icons/fa";
 import { Textarea } from "@/app/components/shadcn/textarea";
 import Image from "next/image";
 import InteractiveCardFooter from "./interactiveFooter";
@@ -149,7 +151,7 @@ export async function ImageComponent({ id }: { id: string }) {
 						</CardHeader>
 					</div>
 					<Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
-						<div className="flex flex-col justify-center">
+						<div className="flex flex-col justify-center text-left">
 							<CardTitle className="text-xl sm:text-2xl text-white">
 								Uploaded by:
 							</CardTitle>
@@ -207,7 +209,7 @@ export async function ImageComponent({ id }: { id: string }) {
 						</CardHeader>
 					</div>
 					<Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
-						<div className="flex flex-col justify-center">
+						<div className="flex flex-col justify-center text-left">
 							<CardTitle className="text-xl sm:text-2xl text-white">
 								Uploaded by:
 							</CardTitle>
@@ -262,7 +264,7 @@ export async function ImageComponent({ id }: { id: string }) {
 						</CardHeader>
 					</div>
 					<Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
-						<div className="flex flex-col justify-center">
+						<div className="flex flex-col justify-center text-left">
 							<CardTitle className="text-xl sm:text-2xl text-white">
 								Uploaded by:
 							</CardTitle>
@@ -305,18 +307,62 @@ export async function ImageComponent({ id }: { id: string }) {
 
 	return (
 		<div className="flex items-center justify-center min-h-screen">
-			<Card className="w-[350px] h-[200px] flex items-center justify-center bg-[#2f1c42] border-[#2f1c42]">
+			<Card className="w-full max-w-4xl mx-auto bg-[#2f1c42] border-[#2f1c42]">
 				<div className="text-center">
-					<CardHeader>
-						<CardTitle className="text-4xl text-white">
-							422
-						</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<CardDescription className="text-2xl text-white">
-							Unsupported file type
-						</CardDescription>
-					</CardContent>
+					<Card className="w-full max-w-4xl mx-auto bg-[#2f1c42] border-[#2f1c42]">
+						<div className="flex-col justify-center">
+							<CardHeader className="flex items-center space-x-2">
+								<CardTitle className="text-white text-lg sm:text-xl break-all sm:break-normal">
+									{imageData.name}
+								</CardTitle>
+							</CardHeader>
+						</div>
+						<Card className="w-full max-w-3xl mx-auto bg-[#412e55] border-[#412e55] h-auto sm:h-[100px] flex items-center justify-between p-4">
+							<div className="flex flex-col justify-center text-left">
+								<CardTitle className="text-xl sm:text-2xl text-white">
+									Uploaded by:
+								</CardTitle>
+								<CardDescription className="text-lg sm:text-2xl text-white">
+									{userData?.name}
+								</CardDescription>
+							</div>
+							<Image
+								src={userData?.avatar}
+								alt="User avatar"
+								width={70}
+								height={70}
+								className="rounded-full ml-4"
+								unoptimized
+							/>
+						</Card>
+						<div className="flex flex-col justify-center items-center my-3">
+							<p className={"text-white justify-center text-sm"}>
+								UID {userData?.id}
+							</p>
+						</div>
+						<CardContent className="relative">
+							<div className="">
+								<CardHeader>
+									<CardTitle className="text-4xl text-white">
+										Preview unavailable
+									</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<CardDescription className="text-2xl text-white">
+										Unsupported file type
+									</CardDescription>
+								</CardContent>
+							</div>
+						</CardContent>
+						<CardFooter className="flex justify-center">
+							<a href={imageData.url}>
+								<Button className="text-white">
+									<FaDownload className="text-xl mr-3" />
+									View raw file
+								</Button>
+							</a>
+						</CardFooter>
+					</Card>
 				</div>
 			</Card>
 		</div>

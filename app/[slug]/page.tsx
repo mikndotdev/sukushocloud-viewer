@@ -89,6 +89,23 @@ export async function generateMetadata(props: PageProps) {
 			};
 		}
 
+		if (userData) {
+			return {
+				title: userData.header,
+				description: userData.footer,
+				robots: {
+					index: false,
+				},
+				openGraph: {
+					images: [
+						{
+							url: "https://view.sukusho.cloud/og/FileOG.png",
+						},
+					],
+				},
+			};
+		}
+
 		return {
 			title: "sukushocloud",
 			description: "Screenshot as a Service",
